@@ -5,6 +5,7 @@ import FlowCanvas from "@/components/flow-canvas/flow-canvas";
 import useCanvas from "@/hooks/useCanvas";
 import useDatabaseFunctions from "@/hooks/useDatabaseFunctions";
 import useLocalStore from "@/stores/local.store";
+import usePersistingStore from "@/stores/persisting.store";
 import { FormattedDatabaseSchemaTable } from "@/types/schema.types";
 import { AnimatePresence } from "framer-motion";
 import { useMemo, useState } from "react";
@@ -18,8 +19,9 @@ export default function Home() {
   const [schema, setSchema] = useState<FormattedDatabaseSchemaTable[]>([]);
 
   const isEditorOpen = useLocalStore((state) => state.isEditorOpen);
-  const savedUrls = useLocalStore((state) => state.savedUrls);
-  const saveUrl = useLocalStore((state) => state.saveUrl);
+  const setCurrentDatabase = useLocalStore((state) => state.setCurrentDatabase);
+  const savedUrls = usePersistingStore((state) => state.savedUrls);
+  const saveUrl = usePersistingStore((state) => state.saveUrl);
 
   const { getDatabaseSchema, testDatabaseConnection, parseDatabaseSchema } =
     useDatabaseFunctions();
@@ -53,6 +55,7 @@ export default function Home() {
                 });
                 setSchema(parseDatabaseSchema(dbSchema));
                 saveUrl(connectionString);
+                setCurrentDatabase(connectionString);
               }
             } else {
               toast("Connection failed", {
@@ -88,7 +91,19 @@ export default function Home() {
             />
           </ReactFlowProvider>
         </>
-      ) : null}
+      ) : (
+        <div className="h-full w-full flex items-center justify-center flex-col">
+          <div className="h-20 aspect-square bg-pink-500/20 flex items-center justify-center rounded-full">
+            <FaDatabase className="text-pink-500 text-4xl" />
+          </div>
+          <p className="font-bold text-xl mt-3 max-w-96 text-center">
+            You are not yet connected to a Database
+          </p>
+          <p className="text-sm mt-1 max-w-56 text-center">
+            Use a database connection string to connect to your database
+          </p>
+        </div>
+      )}
     </main>
   );
 }
