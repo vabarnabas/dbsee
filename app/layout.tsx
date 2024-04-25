@@ -20,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={clsx("min-h-screen h-screen text-slate-800", font.className)}
+        className={clsx(
+          "min-h-screen h-screen text-slate-800 select-none",
+          font.className
+        )}
       >
         <Toaster />
         <Navbar />

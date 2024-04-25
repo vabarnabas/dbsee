@@ -1,3 +1,4 @@
+import useLocalStore from "@/stores/local.store";
 import { FormattedDatabaseSchemaColumn } from "@/types/schema.types";
 import { FaFileCode } from "react-icons/fa";
 import { IoKey } from "react-icons/io5";
@@ -8,12 +9,17 @@ interface Props {
 }
 
 export default function DatabaseNode({ data }: Props) {
+  const openEditor = useLocalStore((state) => state.openEditor);
+
   return (
     <div className="bg-white border border-border-default hover:bg-slate-50 shadow-md rounded-md py-3">
       <div>
         <div className="flex items-center justify-between gap-x-6 mb-2 px-3">
           <p className="font-bold text-xl">{data.tableName}</p>
-          <FaFileCode className="text-slate-300 hover:text-red-500 cursor-pointer" />
+          <FaFileCode
+            onClick={() => openEditor()}
+            className="text-slate-300 hover:text-red-500 cursor-pointer"
+          />
         </div>
         {data.columns.sort((a: FormattedDatabaseSchemaColumn) => {
           if (a.is_pk) {

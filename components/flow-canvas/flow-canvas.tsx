@@ -13,6 +13,7 @@ import "reactflow/dist/style.css";
 import DatabaseNode from "../db-node/database-node";
 import { FaFileCode } from "react-icons/fa";
 import { FaShuffle } from "react-icons/fa6";
+import useLocalStore from "@/stores/local.store";
 
 interface Props {
   initialNodes?: Node[];
@@ -26,6 +27,8 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
 export default function FlowCanvas({ initialEdges, initialNodes }: Props) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes || []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges || []);
+
+  const openEditor = useLocalStore((state) => state.openEditor);
 
   const nodeTypes = useMemo(() => ({ databaseNode: DatabaseNode }), []);
 
@@ -45,8 +48,11 @@ export default function FlowCanvas({ initialEdges, initialNodes }: Props) {
           className="bg-white text-2xl p-2 border border-border-default rounded-md flex gap-x-4 shadow-sm"
           position="top-right"
         >
-          <FaFileCode className=" hover:text-pink-500 cursor-pointer" />
           <FaShuffle className=" hover:text-pink-500 cursor-pointer" />
+          <FaFileCode
+            onClick={() => openEditor()}
+            className=" hover:text-pink-500 cursor-pointer"
+          />
         </Panel>
         <Background />
         <Controls />
