@@ -41,13 +41,13 @@ export default function Home() {
             className="w-full outline-none"
           />
         </div>
-
         <button
           onClick={async () => {
             if ((await testDatabaseConnection(connectionString)) === true) {
               toast("Connection was successful", {
                 icon: <FaCheck />,
               });
+              setSchema([]);
               const dbSchema = await getDatabaseSchema(connectionString);
               if (dbSchema) {
                 toast("Schema is retrived", {
@@ -69,7 +69,7 @@ export default function Home() {
         </button>
       </div>
       {savedUrls.length ? (
-        <div className="overflow-x-auto overflow-y-hidden flex">
+        <div className="overflow-x-auto overflow-y-hidden flex gap-x-2">
           {savedUrls.map((url) => (
             <div
               key={url}
@@ -81,10 +81,12 @@ export default function Home() {
           ))}
         </div>
       ) : null}
-      <AnimatePresence>{isEditorOpen ? <EditorPopup /> : null}</AnimatePresence>
       {schema.length ? (
         <>
           <ReactFlowProvider>
+            <AnimatePresence>
+              {isEditorOpen ? <EditorPopup /> : null}
+            </AnimatePresence>
             <FlowCanvas
               initialEdges={createSchemaEdges(schema)}
               initialNodes={createSchemaNodes(schema)}

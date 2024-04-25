@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -20,10 +20,6 @@ interface Props {
   initialEdges?: Edge[];
 }
 
-const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
-  return { nodes, edges };
-};
-
 export default function FlowCanvas({ initialEdges, initialNodes }: Props) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes || []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges || []);
@@ -31,8 +27,6 @@ export default function FlowCanvas({ initialEdges, initialNodes }: Props) {
   const openEditor = useLocalStore((state) => state.openEditor);
 
   const nodeTypes = useMemo(() => ({ databaseNode: DatabaseNode }), []);
-
-  console.log(edges);
 
   return (
     <div className="w-full h-full border rounded-md border-border-default shadow-sm">
