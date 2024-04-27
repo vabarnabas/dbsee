@@ -1,5 +1,4 @@
 "use client";
-import DatabaseNode from "@/components/db-node/database-node";
 import EditorPopup from "@/components/editor-popup/editor-popup";
 import FlowCanvas from "@/components/flow-canvas/flow-canvas";
 import useCanvas from "@/hooks/useCanvas";
@@ -8,9 +7,10 @@ import useLocalStore from "@/stores/local.store";
 import usePersistingStore from "@/stores/persisting.store";
 import { FormattedDatabaseSchemaTable } from "@/types/schema.types";
 import { AnimatePresence } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { FaCheck, FaDatabase } from "react-icons/fa";
-import { FaCircleXmark } from "react-icons/fa6";
+import { FaCircleXmark, FaDiagramProject, FaX } from "react-icons/fa6";
+import { HiTerminal } from "react-icons/hi";
 import { ReactFlowProvider } from "reactflow";
 import { toast } from "sonner";
 
@@ -82,7 +82,23 @@ export default function Home() {
         </div>
       ) : null}
       {schema.length ? (
-        <>
+        <div className="relative h-full w-full flex flex-col">
+          <div className="flex items-center">
+            <div className="group border w-max px-3 flex items-center gap-x-2 rounded-t-md cursor-pointer hover:bg-slate-50">
+              <div className="flex items-center gap-x-1">
+                <FaDiagramProject className="text-slate-500 text-sm" />
+                Schema
+              </div>
+              <FaX className="group-hover:opacity-100 opacity-0 text-xs hover:text-red-500" />
+            </div>
+            <div className="group border w-max px-3 flex items-center gap-x-2 rounded-t-md cursor-pointer hover:bg-slate-50">
+              <div className="flex items-center gap-x-1">
+                <HiTerminal className="text-slate-500 text-sm" />
+                Console
+              </div>
+              <FaX className="group-hover:opacity-100 opacity-0 text-xs hover:text-red-500" />
+            </div>
+          </div>
           <ReactFlowProvider>
             <AnimatePresence>
               {isEditorOpen ? <EditorPopup /> : null}
@@ -92,7 +108,7 @@ export default function Home() {
               initialNodes={createSchemaNodes(schema)}
             />
           </ReactFlowProvider>
-        </>
+        </div>
       ) : (
         <div className="h-full w-full flex items-center justify-center flex-col">
           <div className="h-20 aspect-square bg-pink-500/20 flex items-center justify-center rounded-full">

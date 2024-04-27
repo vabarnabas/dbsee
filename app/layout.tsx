@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={clsx(
-          "min-h-screen h-screen text-slate-800 select-none",
+          "min-h-screen h-screen text-slate-800 select-none overflow-hidden",
           font.className
         )}
       >
